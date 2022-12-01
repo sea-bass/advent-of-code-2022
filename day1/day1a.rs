@@ -1,4 +1,4 @@
-// Solution to Day 1 puzzle
+// Solution to Day 1 puzzle, Part 1
 // https://adventofcode.com/2022/day/1
 //
 // Example usage:

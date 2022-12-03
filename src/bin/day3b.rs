@@ -1,14 +1,13 @@
-// Solution to Day 3 puzzle, Part 1
+// Solution to Day 3 puzzle, Part 2
 // https://adventofcode.com/2022/day/3
 //
 // Example usage:
-//   cargo run --bin day3a test_input.txt
+//   cargo run --bin day3b test_input.txt
 
 use std::env;
-use std::fs::File;
-use std::io::prelude::*;
-use std::io::BufReader;
+use std::fs;
 
+const GROUP_SIZE: usize = 3;
 const LOWER_A_VAL: u32 = 'a' as u32;
 const LOWER_Z_VAL: u32 = 'z' as u32;
 const UPPER_A_VAL: u32 = 'A' as u32;
@@ -30,18 +29,20 @@ fn get_item_priority(item: char) -> u32 {
     return 0;
 }
 
-fn get_rucksack_priority(line: String) -> u32 {
-    // Split the line into two halves
-    let len = line.len();
-    let left = &line[0..len/2];
-    let right = &line[len/2..len];
-    println!("{}", line);
-
-    // Get the first common occurrence
-    for item in left.chars() {
-        if right.contains(item) {
+fn get_rucksack_priority(lines: &[&str]) -> u32 {
+    let num_elves = lines.len();
+    for item in lines[0].chars() {
+        // Check that all other elves in the group contain this item
+        let mut is_badge = true;
+        for i in 1..num_elves {
+            if !lines[i].contains(item) {
+                is_badge = false;
+                break;
+            }
+        }
+        if is_badge {
             let priority = get_item_priority(item);
-            println!("Found common item {}, priority {}", item, priority);
+            println!("Found badge item: {}, priority {}", item, priority);
             return priority;
         }
     }
@@ -57,13 +58,16 @@ fn main() -> std::io::Result<()> {
     let filename = if args.len() > 1 { &args[1] } else { "data/day3/test_input.txt" };
 
     // Read the file
-    let file = File::open(filename)?;
-    let reader = BufReader::new(file);
+    let data = fs::read_to_string(filename).unwrap();
+    let lines: Vec<&str> = data.split("\n").collect();
 
     // Go through all the lines and tally up the priorities
     let mut total_priority = 0;
-    for line in reader.lines() {
-        total_priority += get_rucksack_priority(line?);
+    let num_groups = lines.len() / GROUP_SIZE;
+    for i in 0..num_groups {
+        let start_idx = i*GROUP_SIZE;
+        let group_lines = &lines[start_idx..start_idx + GROUP_SIZE];
+        total_priority += get_rucksack_priority(group_lines);
     }
 
     println!("\nTotal priority: {}\n", total_priority);

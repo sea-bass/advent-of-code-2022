@@ -13,29 +13,26 @@ const LOWER_Z_VAL: u32 = 'z' as u32;
 const UPPER_A_VAL: u32 = 'A' as u32;
 const UPPER_Z_VAL: u32 = 'Z' as u32;
 
+// If the item is lower case, priority is 1..26
+// If the item is upper case, priority is 27..52
 fn get_item_priority(item: char) -> u32 {
     let item_val = item as u32;
-
-    // If the item is lower case, priority is 1..26
-    // If the item is upper case, priority is 27..52
-    if item_val >= LOWER_A_VAL && item_val <= LOWER_Z_VAL {
-        return item_val - LOWER_A_VAL + 1;
-    } else if item_val >= UPPER_A_VAL && item_val <= UPPER_Z_VAL {
-        return item_val - UPPER_A_VAL + 27;
-    }
-
-    // Otherwise, warn and return 0
-    println!("Invalid item {}, returning zero priority", item);
-    return 0;
+    return match item_val {
+        LOWER_A_VAL..=LOWER_Z_VAL => item_val - LOWER_A_VAL + 1,
+        UPPER_A_VAL..=UPPER_Z_VAL => item_val - UPPER_A_VAL + 27,
+        _ => {
+            println!("Invalid item {}, returning zero priority", item);
+            0
+        }
+    };
 }
 
 fn get_rucksack_priority(lines: &[&str]) -> u32 {
-    let num_elves = lines.len();
     for item in lines[0].chars() {
         // Check that all other elves in the group contain this item
         let mut is_badge = true;
-        for i in 1..num_elves {
-            if !lines[i].contains(item) {
+        for other_line in &lines[1..] {
+            if !other_line.contains(item) {
                 is_badge = false;
                 break;
             }
@@ -63,10 +60,7 @@ fn main() -> std::io::Result<()> {
 
     // Go through all the lines and tally up the priorities
     let mut total_priority = 0;
-    let num_groups = lines.len() / GROUP_SIZE;
-    for i in 0..num_groups {
-        let start_idx = i*GROUP_SIZE;
-        let group_lines = &lines[start_idx..start_idx + GROUP_SIZE];
+    for group_lines in lines.chunks(GROUP_SIZE) {
         total_priority += get_rucksack_priority(group_lines);
     }
 

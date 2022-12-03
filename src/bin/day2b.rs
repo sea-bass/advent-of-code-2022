@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/2
 //
 // Example usage:
-//   ./day2b test_input.txt
+//   cargo run --bin day2b test_input.txt
 
 use std::env;
 use std::fs::File;
@@ -41,7 +41,7 @@ fn get_score(opponent: char, strategy: char) -> i32 {
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day2/test_input.txt" };
 
     // Read the file
     let file = File::open(filename)?;

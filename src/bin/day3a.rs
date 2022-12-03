@@ -1,8 +1,8 @@
-// Solution to Day 2 puzzle, Part 1
-// https://adventofcode.com/2022/day/2
+// Solution to Day 3 puzzle, Part 1
+// https://adventofcode.com/2022/day/3
 //
 // Example usage:
-//   ./day2a test_input.txt
+//   cargo run --bin day3a test_input.txt
 
 use std::env;
 use std::fs::File;
@@ -12,19 +12,9 @@ use std::io::BufReader;
 fn get_score(opponent: char, strategy: char) -> i32 {
     // Convert scores to ASCII
     let opponent_val = opponent as i32 - 'A' as i32 + 1;
-    let strategy_val = strategy as i32 - 'X' as i32 + 1;
+    let win_val = strategy as i32 - 'Y' as i32;
 
-    // Score for your strategy only is based on the value chosen
-    let selection_score = strategy_val;
-
-    // Score for winning / drawing is based on the rock-paper-scissors rules
-    let mut win_val = (strategy_val - opponent_val) % 3;
-    if win_val > 1 {
-        win_val -= 3;
-    } else if win_val < -1 {
-        win_val += 3;
-    }
-
+    // Score for winning / drawing is based on the strategy provided
     let win_score;
     if win_val == 1 {
         win_score = 6; // win
@@ -34,16 +24,24 @@ fn get_score(opponent: char, strategy: char) -> i32 {
         win_score = 3; // draw
     }
 
+    // Based on the winning score, figure out the play and selection score
+    let mut selection_score = opponent_val + win_val;
+    if selection_score > 3 {
+        selection_score -= 3;
+    } else if selection_score < 1 {
+        selection_score += 3;
+    }
+
     let score = selection_score + win_score;
-    println!("{} vs. {}, selection score: {}, win score: {}, score: {}",
-        opponent, strategy, win_val, selection_score, win_score, score);
+    println!("{} needs win {}, selection score: {}, win score: {}, score: {}",
+        opponent, win_val, selection_score, win_score, score);
     return score;
 }
 
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day2/test_input.txt" };
 
     // Read the file
     let file = File::open(filename)?;

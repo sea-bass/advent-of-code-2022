@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/1
 //
 // Example usage:
-//   ./day1b test_input.txt
+//   cargo run --bin day1b test_input.txt
 
 use std::env;
 use std::fs::File;
@@ -12,7 +12,7 @@ use std::io::BufReader;
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day1/test_input.txt" };
 
     // Read the file
     let file = File::open(filename)?;

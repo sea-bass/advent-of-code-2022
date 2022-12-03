@@ -1,2 +1,5 @@
 # VS Code metadata
 .vscode/
+
+# Build artifacts
+target/

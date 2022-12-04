@@ -43,3 +43,10 @@ On the plus side, I enjoyed a lot about the Cargo system. This is exactly the ea
 My takeaway for today was that I found myself defaulting to indexing and range based for-loops, and that immediately raises an alarm in my head that I'm not taking advantage of what Rust has to offer. Today's mission to set up Cargo and solve the puzzle was successful, and the next steps are clear.
 
 UPDATE: After some colleagues added suggestions, I was able to eliminate all `len()` functions and range-based for-loops and indexing. I also learned about the `match` operator. Still much more to improve!
+
+## Day 4
+Not much to share for today's progress. This puzzle went back to reading a file line-by-line, so I could draw upon existing patterns.
+
+I did learn (read: search Stack Overflow) how to [split a string by multiple delimiters](https://stackoverflow.com/questions/29240157/how-can-i-split-a-string-string-or-str-on-more-than-one-delimiter), but most importantly it was my first use of this [`map`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map) functionality I had seen around the place, to transform an iterator into another. In my case, I used it to convert strings to integers to solve today's puzzle.
+
+With the rest of my time, I'm going to take a read through Rust content to learn about some of the key concepts and features I should be aware of...

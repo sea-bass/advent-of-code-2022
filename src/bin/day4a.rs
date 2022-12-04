@@ -7,6 +7,9 @@
 use std::env;
 use std::fs;
 
+extern crate itertools;
+use itertools::Itertools;
+
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
@@ -14,16 +17,17 @@ fn main() -> std::io::Result<()> {
 
     // Read the file
     let data = fs::read_to_string(filename).unwrap();
-    let lines: Vec<&str> = data.split("\n").collect();
 
     // Go through all the lines and find redundant assignments.
     let mut num_redundant = 0;
     for line in data.split("\n") {
-        let nums: Vec<u32> = line.split(&['-', ','][..])
-            .map(|x| x.parse::<u32>().unwrap()).collect();
+        let (min1, max1, min2, max2) = line.split(&['-', ','][..])
+            .map(|x| x.parse::<u32>().unwrap())
+            .next_tuple()
+            .unwrap();
 
-        let first_dominates = nums[0] <= nums[2] && nums[1] >= nums[3];
-        let second_dominates = nums[0] >= nums[2] && nums[1] <= nums[3];
+        let first_dominates = min1 <= min2 && max1 >= max2;
+        let second_dominates = min1 >= min2 && max1 <= max2;
         if first_dominates || second_dominates {
             println!("Found dominating pair: {}", line);
             num_redundant += 1;

@@ -7,6 +7,9 @@
 use std::env;
 use std::fs;
 
+extern crate itertools;
+use itertools::Itertools;
+
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
@@ -14,16 +17,17 @@ fn main() -> std::io::Result<()> {
 
     // Read the file
     let data = fs::read_to_string(filename).unwrap();
-    let lines: Vec<&str> = data.split("\n").collect();
 
     // Go through all the lines and find overlapping assignments per line.
     let mut num_redundant = 0;
     for line in data.split("\n") {
-        let nums: Vec<u32> = line.split(&['-', ','][..])
-            .map(|x| x.parse::<u32>().unwrap()).collect();
+        let (min1, max1, min2, max2) = line.split(&['-', ','][..])
+            .map(|x| x.parse::<u32>().unwrap())
+            .next_tuple()
+            .unwrap();
 
-        let first_below_second = nums[1] < nums[2];
-        let first_above_second = nums[0] > nums[3];
+        let first_below_second = max1 < min2;
+        let first_above_second = min1 > max2;
         if !(first_below_second || first_above_second) {
             println!("Found overlapping pair: {}", line);
             num_redundant += 1;

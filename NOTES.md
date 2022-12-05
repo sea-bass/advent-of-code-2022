@@ -26,7 +26,7 @@ Sidebar: **WHY IS THERE NO MODULO OPERATOR IN RUST?** I definitely submitted a w
 After getting an answer, my cognitive load was sufficiently reduced where I wasn't trying to balance solving the puzzle with importing utilities, and landed on this [Organizing Code](https://rust-classes.com/chapter_4_3.html) resource. This will be nice to look into later, both for splitting code into multiple files and for declaring external crates as dependencies. My impression here is that once a project is set up, `cargo build` should do its thing and I will be happy. We'll see...
 
 ## Day 3
-As promised, I converted my repo into a Cargo project so now I can build and run things way more easily!
+As promised, I converted my repo into a Cargo workspace so now I can build and run things way more easily!
 
 The first part of today's puzzle was quite straightforward as it reused a lot from the last 2 days: Read a file line-by-line, do some operation on strings to convert them to a numeric score, and call it a day.
 
@@ -49,4 +49,17 @@ Not much to share for today's progress. This puzzle went back to reading a file 
 
 I did learn (read: search Stack Overflow) how to [split a string by multiple delimiters](https://stackoverflow.com/questions/29240157/how-can-i-split-a-string-string-or-str-on-more-than-one-delimiter), but most importantly it was my first use of this [`map`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map) functionality I had seen around the place, to transform an iterator into another. In my case, I used it to convert strings to integers to solve today's puzzle.
 
-With the rest of my time, I'm going to take a read through Rust content to learn about some of the key concepts and features I should be aware of...
+I also brought back importing an external crate so I could use [`itertools::next_tuple()`](https://docs.rs/itertools/0.10.5/itertools/trait.Itertools.html#method.next_tuple) to get a tuple of named variables and make the code look a little more readable than just indexing into a collected vector.
+
+I'm now going to take a step back and read through Rust content to learn about some key concepts and features I should be aware of... I feel I'm still not being as idiomatic as I could be.
+
+## Day 5
+Today I took a step back and began reading [The Rust Programming Language book](https://doc.rust-lang.org/book/title-page.html).
+It has been tremendously helpful to understand the core concepts behind Rust, and what I was leaving on the table.
+So far in my reading, what has stood out as unique functionality is:
+
+* Ownership ([Chapter 4](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)) and its implications towards creating safe code that catches what would be potential runtime issues at compile time.
+* Enums ([Chapter 6](https://doc.rust-lang.org/book/ch06-00-enums.html)), which solidify how ubiquitous things like `Result` and `Option` are actually implemented in Rust, what all the syntax means, etc.
+
+Sadly, the reading didn't seem to have taken effect because my puzzle solution was abysmal and it took me 2.5 whole hours to do it all... even with some help getting pointed to the `Vec::split_off()` function.
+Overall, not pleased with my puzzle solving skills today.

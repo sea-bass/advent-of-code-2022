@@ -54,7 +54,7 @@ I also brought back importing an external crate so I could use [`itertools::next
 I'm now going to take a step back and read through Rust content to learn about some key concepts and features I should be aware of... I feel I'm still not being as idiomatic as I could be.
 
 ## Day 5
-Today I took a step back and began reading [The Rust Programming Language book](https://doc.rust-lang.org/book/title-page.html).
+Today I took that step back and began reading [The Rust Programming Language book](https://doc.rust-lang.org/book/title-page.html).
 It has been tremendously helpful to understand the core concepts behind Rust, and what I was leaving on the table.
 So far in my reading, what has stood out as unique functionality is:
 
@@ -63,3 +63,9 @@ So far in my reading, what has stood out as unique functionality is:
 
 Sadly, the reading didn't seem to have taken effect because my puzzle solution was abysmal and it took me 2.5 whole hours to do it all... even with some help getting pointed to the `Vec::split_off()` function.
 Overall, not pleased with my puzzle solving skills today.
+
+On the more positive side, I did implement my first structs today which was good practice to how Rust does abstraction.
+Excited to do more with enums going forward -- not just being better about handling the existing ones better (right now I've just sort of been spamming `unwrap()` under the assumption that the data is there), but creating my own enums to help do my bidding for the remaining puzzles.
+
+Another observation is that there is a lot of copypasta between parts of the same day. So going forward I may consider reusing the same file and adding arguments to toggle which part is being run.
+Should be good practice.

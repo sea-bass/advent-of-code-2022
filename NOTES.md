@@ -69,3 +69,11 @@ Excited to do more with enums going forward -- not just being better about handl
 
 Another observation is that there is a lot of copypasta between parts of the same day. So going forward I may consider reusing the same file and adding arguments to toggle which part is being run.
 Should be good practice.
+
+## Day 6
+I found today's puzzle much more manageable than yesterday's.
+Funny enough, my plan for today to unify both parts into one file was perfect given the puzzle,
+as the first and second part were the same question but with a different range of values.
+Not much else worth noting for today besides the fact that I tried out `HashMap` as my approach to convert a vector slice to something that's easy to detect duplicates for.
+Was it the best approach? Probably not. Did it work? Yes it is.
+Yet again, not as idiomatic as it could be. Must read more of the book.

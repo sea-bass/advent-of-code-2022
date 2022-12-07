@@ -6,14 +6,14 @@
 
 use std::collections::HashSet;
 use std::env;
+use std::iter::FromIterator;
 use std::fs;
 
 fn get_marker(chars : &Vec<char>, streak_length: usize) {
     for i in streak_length..=chars.len() {
-        let mut set: HashSet<char> = HashSet::new();
-        for item in &chars[i-streak_length..i] {
-            set.insert(*item);
-        }
+        let set = HashSet::<&char>::from_iter(
+            &chars[i-streak_length..i]
+        );
         if set.len() == streak_length {
             println!("Found marker at index {}", i);
             break;
@@ -24,7 +24,7 @@ fn get_marker(chars : &Vec<char>, streak_length: usize) {
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[2] } else { "data/day6/test_input_1.txt" };
+    let filename = if args.len() > 1 { &args[2] } else { "data/day6/test_input.txt" };
 
     // Read the file
     let data = fs::read_to_string(filename).unwrap();

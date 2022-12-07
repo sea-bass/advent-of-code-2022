@@ -74,6 +74,10 @@ Should be good practice.
 I found today's puzzle much more manageable than yesterday's.
 Funny enough, my plan for today to unify both parts into one file was perfect given the puzzle,
 as the first and second part were the same question but with a different range of values.
-Not much else worth noting for today besides the fact that I tried out `HashMap` as my approach to convert a vector slice to something that's easy to detect duplicates for.
-Was it the best approach? Probably not. Did it work? Yes it is.
-Yet again, not as idiomatic as it could be. Must read more of the book.
+Not much else worth noting for today besides the fact that I tried out `HashSet` as my approach to convert a vector slice to something that's easy to detect duplicates for.
+
+My initial approach involved sort of giving up and creating a blank `HashSet` then iterating through a slice and adding the elements piece by piece.
+However, after speaking to a colleague, he implored me to look into `from_iter()`, which was super helpful.
+I fumbled my way through getting it working in a nice idiomatic way, but seeing all these error messages about traits leaves me yearning for knowledge of what a trait actually is, which I know comes up later in the book.
+
+Generally, I must read more of the book... there's also a lot more I want to know about collections in Rust even though I've been using them somewhat blindly.

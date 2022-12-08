@@ -87,6 +87,8 @@ I spent a LONG time trying to crack this, and ran into fundamental issues with p
 Specifically, I attempted to have a data structure and a `HashMap` that helped me find things within that data structure.
 However, this multiple ownership business ran me into a wall and I have up... for now.
 
+UPDATE: After getting a hint from a colleague, I gave up on the custom data structure and was able to get a much more concise solution using a stack (represented by a `Vec`) and a `HashMap`. This was a tough one.
+
 ## Day 8
 This puzzle was again more on the straightforward side.
 Not much was new here in my learning except this was my first instance of making a container of containers (in this case a `Vec<Vec<u32>>`).

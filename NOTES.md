@@ -81,3 +81,13 @@ However, after speaking to a colleague, he implored me to look into `from_iter()
 I fumbled my way through getting it working in a nice idiomatic way, but seeing all these error messages about traits leaves me yearning for knowledge of what a trait actually is, which I know comes up later in the book.
 
 Generally, I must read more of the book... there's also a lot more I want to know about collections in Rust even though I've been using them somewhat blindly.
+
+## Day 7
+I spent a LONG time trying to crack this, and ran into fundamental issues with picking a solution that would work in other languages, but Rust actively tries to avoid.
+Specifically, I attempted to have a data structure and a `HashMap` that helped me find things within that data structure.
+However, this multiple ownership business ran me into a wall and I have up... for now.
+
+## Day 8
+This puzzle was again more on the straightforward side.
+Not much was new here in my learning except this was my first instance of making a container of containers (in this case a `Vec<Vec<u32>>`).
+There was probably an opportunity to not copy-paste so much of my code for all the different cases in the puzzle (left, right, up, and down directions), but I didn't feel the extra time spent would get me to learn anything new.

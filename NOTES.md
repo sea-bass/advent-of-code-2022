@@ -93,3 +93,10 @@ UPDATE: After getting a hint from a colleague, I gave up on the custom data stru
 This puzzle was again more on the straightforward side.
 Not much was new here in my learning except this was my first instance of making a container of containers (in this case a `Vec<Vec<u32>>`).
 There was probably an opportunity to not copy-paste so much of my code for all the different cases in the puzzle (left, right, up, and down directions), but I didn't feel the extra time spent would get me to learn anything new.
+
+## Day 9
+Continuing on the trend of puzzles being doable but still challenging, after a slightly soul-crushing Day 7 experience.
+Today I tried out tuples as a simple way of representing (x, y) position as an `(i32, i32)`, which was a nice new thing but nothign groundbreaking given I've been using more complicated data structures.
+One interesting observation is that eventually I wanted to convert my tuple to a `Position` struct with `x` and `y` field so readability would be improved (`variable.0` would become `variable.x`, for instance) ... however, since I was using a `HashSet` in my implementation it seemed that I needed to write my own hash trait for that position class.
+Based on [the documentation](https://doc.rust-lang.org/std/hash/trait.Hash.html), it seems pretty straightforward; however, I then ran into issues with having to implement equality traits and more, so I dropped it in favor of staying with the simple tuple type.
+Luckily, [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) was a simple way to get some readability out of this!

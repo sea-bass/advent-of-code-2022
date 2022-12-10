@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/5
 //
 // Example usage:
-//   cargo run --bin day5b test_input.txt
+//   cargo run --bin day5b data/day5/test_input.txt
 
 use std::env;
 use std::fs;

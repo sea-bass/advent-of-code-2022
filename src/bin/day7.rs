@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/7
 //
 // Example usage:
-//   cargo run --bin day7 test_input.txt
+//   cargo run --bin day7 data/day7/test_input.txt
 
 use std::collections::HashMap;
 use std::cmp::min;

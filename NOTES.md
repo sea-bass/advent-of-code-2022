@@ -100,3 +100,8 @@ Today I tried out tuples as a simple way of representing (x, y) position as an `
 One interesting observation is that eventually I wanted to convert my tuple to a `Position` struct with `x` and `y` field so readability would be improved (`variable.0` would become `variable.x`, for instance) ... however, since I was using a `HashSet` in my implementation it seemed that I needed to write my own hash trait for that position class.
 Based on [the documentation](https://doc.rust-lang.org/std/hash/trait.Hash.html), it seems pretty straightforward; however, I then ran into issues with having to implement equality traits and more, so I dropped it in favor of staying with the simple tuple type.
 Luckily, [type aliases](https://doc.rust-lang.org/reference/items/type-aliases.html) was a simple way to get some readability out of this!
+
+## Day 10
+I'm happy to say 10 days in that I only Googled **one** thing in the solving of this entire exercise, which is wildly different from my experience so far.
+Maybe today's problem was more manageable (I think it was), but maybe my efforts learning Rust are starting to pay dividends.
+I don't think I used any new functionality today, except that the ~~modulo~~remainder operator that gave me grief early on resurfaced and was useful as an actual remainder operator.

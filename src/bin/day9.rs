@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/9
 //
 // Example usage:
-//   cargo run --bin day9 test_input.txt
+//   cargo run --bin day9 data/day9/test_input.txt
 
 use std::collections::HashSet;
 use std::env;

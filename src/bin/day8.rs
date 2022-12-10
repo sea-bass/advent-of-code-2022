@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/8
 //
 // Example usage:
-//   cargo run --bin day8 test_input.txt
+//   cargo run --bin day8 data/day8/test_input.txt
 
 use std::cmp::max;
 use std::env;

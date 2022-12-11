@@ -107,8 +107,9 @@ Maybe today's problem was more manageable (I think it was), but maybe my efforts
 I don't think I used any new functionality today, except that the ~~modulo~~remainder operator that gave me grief early on resurfaced and was useful as an actual remainder operator.
 
 ## Day 11
-This was another extremely tough day for me, taking around 2.5 hours just to do the first part!
+This was another extremely tough day for me, just like Day 7, taking me around **5 hours total** even with help from a colleague at the end!
 To parse these arbitrary operations, I found a really cool crate named [`evalexpr`](https://docs.rs/evalexpr/latest/evalexpr/) that I eventually figured out how to utilize properly given how Rust enforces ownership.
 I also got more familiar with structs and closures in Rust doing this challenge, which has been a good learning experience.
 However, moving to Part 2 had me hitting against a fundamental limitation in `evalexpr` where there is no notion of "big integer" support, and simply converting from ints to floats was not enough... so I'd have to think of something else altogether.
-For now, I'm going to take a break for the sake of my sanity.
+
+UPDATE: The modulo operator on the lowest common multiple of all the monkey's divisors. That was the trick. Could keep everything as `i64` once my colleague gave me that hint!

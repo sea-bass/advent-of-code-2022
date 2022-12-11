@@ -9,6 +9,9 @@ use std::fs;
 
 extern crate evalexpr;
 use evalexpr::*;
+extern crate num;
+use num::integer::lcm;
+
 
 struct Monkey {
     id: i64,
@@ -76,37 +79,48 @@ fn simulate_monkeys(monkeys: &mut Vec<Monkey>, rounds: usize, worry_divided: boo
     for monkey in monkeys.iter() {
         monkey.print();
     }
+
+    let mut div_lcm = 1;
+    for monkey in monkeys.iter() {
+        div_lcm = lcm(div_lcm, monkey.test_divisible);
+        // println!("Lowest common multiple: {}", div_lcm);
+    }
+
     for round in 0..rounds {
         println!("=== ROUND {} ===", round + 1);
         // Inspections
         for m in 0..monkeys.len() {
             for i in (0..monkeys[m].items.len()).rev() {
-                println!("  Monkey inspecting an item with worry level {}",
-                    monkeys[m].items[i]);
+                // println!("  Monkey inspecting an item with worry level {}",
+                    // monkeys[m].items[i]);
                 // Operate on worry levels
                 monkeys[m].operate(i);
 
                 // Boredom
                 if worry_divided {
-                    monkeys[m].items[i] /= 3;
-                    println!("    Worry level is now {}", monkeys[m].items[i]);
+                    monkeys[m].items[i] = monkeys[m].items[i] / 3;
+                    // println!("    Worry level is now {}", monkeys[m].items[i]);
                 }
 
                 // Update inspection count
                 monkeys[m].num_inspections += 1;
 
-                let item_val = monkeys[m].items[i];
-                let is_divisible = (item_val % monkeys[m].test_divisible) == 0;
+                let mut item_val = monkeys[m].items[i];
+                let is_divisible = 
+                    (item_val % monkeys[m].test_divisible) == 0;
                 let throw_target = match is_divisible {
                     true => monkeys[m].test_true_target,
                     false => monkeys[m].test_false_target,
                 };
 
+                // Bound the items to prevent overflow
+                item_val = item_val % div_lcm;
+
                 // Do the actual throwing
                 monkeys[throw_target].items.push(item_val);
                 monkeys[m].items.remove(i);
-                println!("    Worry level {} divisible by {}: {}\n    Throwing to monkey {}",
-                    item_val, monkeys[m].test_divisible, is_divisible, throw_target);
+                // println!("    Worry level {} divisible by {}: {}\n    Throwing to monkey {}",
+                //     item_val, monkeys[m].test_divisible, is_divisible, throw_target);
             }
         }
         for monkey in monkeys.iter() {
@@ -135,7 +149,7 @@ fn main() {
     println!("\nPart 1: Monkey business = {}", get_monkey_business(&mut monkeys));
 
     // Simulate Part 2
-    // let mut monkeys = initialize_monkeys(filename);
-    // simulate_monkeys(&mut monkeys, 10000, false);
-    // println!("\nPart 2: Monkey business = {}", get_monkey_business(&mut monkeys));
+    let mut monkeys = initialize_monkeys(filename);
+    simulate_monkeys(&mut monkeys, 10000, false);
+    println!("\nPart 2: Monkey business = {}", get_monkey_business(&mut monkeys));
 }

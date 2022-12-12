@@ -113,3 +113,10 @@ I also got more familiar with structs and closures in Rust doing this challenge,
 However, moving to Part 2 had me hitting against a fundamental limitation in `evalexpr` where there is no notion of "big integer" support, and simply converting from ints to floats was not enough... so I'd have to think of something else altogether.
 
 UPDATE: The modulo operator on the lowest common multiple of all the monkey's divisors. That was the trick. Could keep everything as `i64` once my colleague gave me that hint!
+
+## Day 12
+Of course there was going to be a graph search algorithm question...
+
+I didn't do anything super fancy in terms of algorithms; I simply wanted to implement depth-first search (DFS) using some of the collections provided by Rust.
+In this case, I ended up using a `VecDeque` to push to and pop from, and then a `HashSet` on the node positions to figure out whether nodes were already added to the queue.
+I got stuck for a little bit since I was accidentally adding nodes multiple times to the queue, which still solved fine for the test input but definitely caused the puzzle input to add nodes faster than it could consume them... so that took a while to debug.

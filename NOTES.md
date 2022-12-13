@@ -120,3 +120,9 @@ Of course there was going to be a graph search algorithm question...
 I didn't do anything super fancy in terms of algorithms; I simply wanted to implement depth-first search (DFS) using some of the collections provided by Rust.
 In this case, I ended up using a `VecDeque` to push to and pop from, and then a `HashSet` on the node positions to figure out whether nodes were already added to the queue.
 I got stuck for a little bit since I was accidentally adding nodes multiple times to the queue, which still solved fine for the test input but definitely caused the puzzle input to add nodes faster than it could consume them... so that took a while to debug.
+
+## Day 13
+This is starting to get really leetcodey, which I don't particularly enjoy...
+Today's puzzle involved writing a recursive parser for arbitrary levels of brackets, plus a sorting algorithm for the second part (ugh).
+The parser was a little tricky but I'm glad I stuck it out; as far as the sorting algorithm, I literally just copied a Rust bubble sort implementation from [this page](https://www.hackertouch.com/bubble-sort-in-rust.html) and it did the job.
+It did make search for the second part comically slow (took a few seconds to solve), but that's fine by me. Ship it.

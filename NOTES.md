@@ -126,3 +126,11 @@ This is starting to get really leetcodey, which I don't particularly enjoy...
 Today's puzzle involved writing a recursive parser for arbitrary levels of brackets, plus a sorting algorithm for the second part (ugh).
 The parser was a little tricky but I'm glad I stuck it out; as far as the sorting algorithm, I literally just copied a Rust bubble sort implementation from [this page](https://www.hackertouch.com/bubble-sort-in-rust.html) and it did the job.
 It did make search for the second part comically slow (took a few seconds to solve), but that's fine by me. Ship it.
+
+## Day 14
+Today was a fun puzzle, but still took me a while.
+The Rust highlight for today was I was sick of using `Vec<Vec<TYPE>>` for 2D arrays, so I added the [`ndarray`](https://docs.rs/ndarray/latest/ndarray/) crate and my life was made way easier.
+I ran into a little snag during this puzzle because for some reason I had originally assumed that the grid was finite width and sand grains could overflow on the left/right sides (which was mentioned nowhere).
+This meant that for Part 2 my simulation wouldn't end, and it took me a while to realize why.
+As a super hack, I basically added an "offset" to the grid so X=0 was some other large positive value, and just kept padding all my coordinates until the Part 2 simulation for the puzzle input terminated correctly.
+Whatever, it worked :)

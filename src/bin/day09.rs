@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/9
 //
 // Example usage:
-//   cargo run --bin day9 data/day9/test_input.txt
+//   cargo run --bin day09 data/day09/test_input.txt
 
 use std::collections::HashSet;
 use std::env;
@@ -114,7 +114,7 @@ fn part2(filename: &str, num_segments: usize) {
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day9/test_input_1.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day09/test_input_1.txt" };
 
     // Solve the puzzles!
     part1(filename);

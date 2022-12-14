@@ -16,5 +16,5 @@ cargo build
 To run the example for a particular day with a particular file:
 
 ```
-cargo run --bin day1a data/day1/puzzle_input.txt
+cargo run --bin day01a data/day01/puzzle_input.txt
 ```

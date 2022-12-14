@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/7
 //
 // Example usage:
-//   cargo run --bin day7 data/day7/test_input.txt
+//   cargo run --bin day07 data/day07/test_input.txt
 
 use std::collections::HashMap;
 use std::cmp::min;
@@ -12,7 +12,7 @@ use std::fs;
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day7/test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day07/test_input.txt" };
 
     // Read the file
     let data = fs::read_to_string(filename).unwrap();
@@ -65,13 +65,13 @@ fn main() {
                 }
             }
         }
-            
+
     }
 
     // Part 1: Print sizes
     const MAX_SIZE: u32 = 100000;
     let mut size_count = 0;
-    for (name, &size) in &folder_map {
+    for (_, &size) in &folder_map {
         if size <= MAX_SIZE {
             size_count += size;
         }
@@ -85,7 +85,7 @@ fn main() {
     let total_size = folder_map.get(&"/".to_string()).unwrap();
     println!("\nPart 2:\nTotal file size: {}", total_size);
     let mut smallest_dir_size = u32::MAX;
-    for (name, &size) in &folder_map {
+    for (_, &size) in &folder_map {
         if (total_size - size) <= REQUIRED_SIZE {
             smallest_dir_size = min(smallest_dir_size, size);
         }

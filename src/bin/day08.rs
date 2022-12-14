@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/8
 //
 // Example usage:
-//   cargo run --bin day8 data/day8/test_input.txt
+//   cargo run --bin day08 data/day08/test_input.txt
 
 use std::cmp::max;
 use std::env;
@@ -99,7 +99,7 @@ fn scenic_score(data: &Vec<Vec<u32>>,
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day8/test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day08/test_input.txt" };
 
     // Read the file and convert it to a vector of vectors
     let data_raw = fs::read_to_string(filename).unwrap();

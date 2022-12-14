@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/5
 //
 // Example usage:
-//   cargo run --bin day5b data/day5/test_input.txt
+//   cargo run --bin day05b data/day05/test_input.txt
 
 use std::env;
 use std::fs;
@@ -112,7 +112,7 @@ impl BoxStacks {
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day5/test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day05/test_input.txt" };
 
     // Run the code
     let mut box_stacks = BoxStacks::new(filename);

@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/3
 //
 // Example usage:
-//   cargo run --bin day3a data/day3/test_input.txt
+//   cargo run --bin day03a data/day03/test_input.txt
 
 use std::env;
 use std::fs::File;
@@ -54,7 +54,7 @@ fn get_rucksack_priority(line: String) -> u32 {
 fn main() -> std::io::Result<()> {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day3/test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day03/test_input.txt" };
 
     // Read the file
     let file = File::open(filename)?;

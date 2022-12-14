@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/6
 //
 // Example usage:
-//   cargo run --bin data/day6/test_input.txt
+//   cargo run --bin data/day06/test_input.txt
 
 use std::collections::HashSet;
 use std::env;
@@ -24,7 +24,7 @@ fn get_marker(chars : &Vec<char>, streak_length: usize) {
 fn main() {
     // Get the filename from the command line, else fall back to default
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "data/day6/test_input.txt" };
+    let filename = if args.len() > 1 { &args[1] } else { "data/day06/test_input.txt" };
 
     // Read the file
     let data = fs::read_to_string(filename).unwrap();

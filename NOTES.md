@@ -142,5 +142,8 @@ Thankfully, not the case, as validated by [this Reddit post](https://www.reddit.
 
 However, there was another issue.
 There definitely was something more clever on the algorithmic side I could have done, because Part 2 was very, very, very slow with the full puzzle input with the `O(n^2)` loop over all rows, all columns within range.
-Even running in release mode, I did the math and it would take ~100 hours to complete with my implementation.
+Even running with the release profile, I did the math and it would take ~100 hours to complete with my implementation.
 So that's not going to fit within the day...
+
+**UPDATE:** After scouring Reddit, I realized the logic is to assume that the beacon must be in a point immediately outside any individual sensor's periphery, and then to check only those peripheral points and compare that with the range of all the other sensors.
+Using perimeter vs. area = computational complexity gains. Lesson learned.

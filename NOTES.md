@@ -134,3 +134,13 @@ I ran into a little snag during this puzzle because for some reason I had origin
 This meant that for Part 2 my simulation wouldn't end, and it took me a while to realize why.
 As a super hack, I basically added an "offset" to the grid so X=0 was some other large positive value, and just kept padding all my coordinates until the Part 2 simulation for the puzzle input terminated correctly.
 Whatever, it worked :)
+
+## Day 15
+Oh, more 2D grids in today's puzzle!
+Unlike yesterday, today's puzzle didn't have walls or anything like that, so I realized we don't have to store every possible grid element and for my solution a `HashMap` was enough... although I was terrified that Part 2 was going to sneak something like this that would break my assumptions and send me back to the drawing board.
+Thankfully, not the case, as validated by [this Reddit post](https://www.reddit.com/r/adventofcode/comments/zmfo0j/2022_day_15_part_1_ah_yes_this_seems_to_be_a_bit/).
+
+However, there was another issue.
+There definitely was something more clever on the algorithmic side I could have done, because Part 2 was very, very, very slow with the full puzzle input with the `O(n^2)` loop over all rows, all columns within range.
+Even running in release mode, I did the math and it would take ~100 hours to complete with my implementation.
+So that's not going to fit within the day...

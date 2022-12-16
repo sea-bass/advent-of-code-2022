@@ -2,7 +2,7 @@
 // https://adventofcode.com/2022/day/15
 //
 // Usage:
-//   cargo run --bin day15 <filename> <test_val>
+//   cargo run -r --bin day15 <filename> <test_val>
 //
 // NOTE: For Part 1, <test_val> refers to the single row to check
 //       For Part 2, <test_val> refers to the upper limit of the range 0..=<test_row>

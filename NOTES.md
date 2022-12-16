@@ -147,3 +147,14 @@ So that's not going to fit within the day...
 
 **UPDATE:** After scouring Reddit, I realized the logic is to assume that the beacon must be in a point immediately outside any individual sensor's periphery, and then to check only those peripheral points and compare that with the range of all the other sensors.
 Using perimeter vs. area = computational complexity gains. Lesson learned.
+
+## Day 16
+More hardcore algorithms questions. What a drag.
+I tried pruning the search space by not even attempting to open valves with 0 flow rate, and also avoiding cyclic transitions where you just go back and forth between tunnels... but besides that I didn't really have the energy to figure out anything more clever.
+
+
+Part 1 took a few minutes to run on the puzzle input, and Part 2 was... just hopeless.
+I read on Reddit that one approach to reduce the search space is to eliminate all the zero flow valves and build a simplified graph of only transitions between "important" valves using the shortest path between them.
+I'm not going to spend hours on that, so... I'm done.
+
+On a positive note, I grabbed the [`regex`](https://docs.rs/regex/latest/regex/) crate so I could be just a little bit smarter about parsing the file input, and that worked great!

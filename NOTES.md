@@ -168,7 +168,10 @@ On a positive note, I grabbed the [`regex`](https://docs.rs/regex/latest/regex/)
 This problem seemed really fun, and working on Part 1 was very fun, although time-consuming given my skills.
 Yet again, Part 2 throws a practical wrench in things because you can no longer allocate memory to contain everything.
 I made a really stupid rolling buffer that literally copies elements instead of just moving the indexing.
-It was (as the trend seems to be going) painfully slow, but it will eventually solve the problem in about 30 hours, according to rough calculations.
+It was (as the trend seems to be going) painfully slow, but it will eventually solve the problem in about 100 hours, according to rough calculations.
 
 Looking at Reddit again, I see the "discrete math PhD" solution is to apply a cycle finding algorithm so you can find a repeating pattern well before the cutoff and then use some simple arithmetic to find the tower height after any arbitrary steps given the pattern.
-Am I going to go down this rabbit hole, though? Nope.
+
+Am I going to go down this rabbit hole, though? Yes.
+
+After taking a break, I spent a few more hours writing up a (probably inefficient) pattern finding algorithm, which sped up the code so much that by the time I figured out the algorithm, fixed bugs, etc. my brute-force approach got approximately 2.8% through all the required steps.

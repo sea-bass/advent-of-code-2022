@@ -11,15 +11,14 @@ use std::env;
 use std::fs;
 
 extern crate ndarray;
-use ndarray::{Array2, s};
+use ndarray::Array2;
 
 
 const GRID_WIDTH: usize = 7;
 const GRID_HEIGHT: usize = 100000;  // No need to make this so big since we'll be doing a rolling buffer
-const BUFFER_WINDOW: usize = 50000;
-const BUFFER_THRESH: i64 = 10;
 
 type RockPoints = Vec<[i64; 2]>;
+type Pattern = (usize, i64, i64, i64);  // Rock index, gust, horizontal displacement
 
 fn init_rock_pts() -> Vec<RockPoints> {
     let mut rock_vec = Vec::new();
@@ -104,31 +103,23 @@ fn get_gust_dirs(gusts: &str) -> Vec<i64> {
 fn rock_sim(grid: &mut Array2::<u32>, gusts: &String, num_rocks: i64) -> i64 {
 
     // Initialize
-    let mut new_grid;
+    // let mut new_grid;
     let rock_pts = init_rock_pts();
     let num_rock_types = rock_pts.len() as i64;
     let gust_vec = get_gust_dirs(&gusts[..]);
     let num_gusts = gust_vec.len() as i64;
     let mut step: i64 = 0;
     let mut tower_height: i64 = 0;
-    let mut buffer_height: i64 = 0;
 
-    let mut pattern = Vec::<i64>::new();
-    for p in 0..num_rock_types {
-        pattern.push(-1);
-    }
+    let mut tower_height_vec = Vec::new();
+    let mut pattern_vec = Vec::new();
 
     // Loop through all the steps
     for r in 0..num_rocks {
-        let row: i64 = (GRID_HEIGHT as i64) - 1 - (tower_height - buffer_height) - 3;
-        let col: i64 = 2;
+        let row: i64 = (GRID_HEIGHT as i64) - 1 - tower_height - 3;
+        let mut col = 2;
         let rock_idx = (r % num_rock_types) as usize;
         let mut rock_stopped = false;
-        
-        if r % 100000000 == 0 {
-            println!("Simulating rock {} / {} [{}%]",
-                r, num_rocks, (r as f64 / num_rocks as f64) * 100.0);
-        }
 
         // Simulate a single rock falling to completion
         let mut pts = get_rock_pts(&rock_pts[rock_idx], [row, col]);
@@ -151,6 +142,7 @@ fn rock_sim(grid: &mut Array2::<u32>, gusts: &String, num_rocks: i64) -> i64 {
                 // new_pts = pts.clone();
             } else {
                 // println!("Gust pushes rock in {}", dir);
+                col += dir;
                 pts = new_pts;
             }
 
@@ -166,11 +158,15 @@ fn rock_sim(grid: &mut Array2::<u32>, gusts: &String, num_rocks: i64) -> i64 {
             } else {
                 // Update the tower height if stopped
                 // println!("Rock stopped at {}, {}", row, col);
+                let mut delta_height = 0;
                 for pt in pts.iter() {
                     grid[[pt[0] as usize, pt[1] as usize]] = (rock_idx as u32) + 1;
-                    let pt_height = GRID_HEIGHT as i64 - pt[0] as i64 + buffer_height;
-                    tower_height = max(tower_height, pt_height);
+                    let pt_height = GRID_HEIGHT as i64 - pt[0] as i64;
+                    delta_height = max(delta_height, pt_height - tower_height);
                 }
+                pattern_vec.push((rock_idx, dir, col, delta_height));
+                tower_height += delta_height;
+                tower_height_vec.push(tower_height);
                 // println!("New tower height: {}", tower_height);
                 rock_stopped = true;
             }
@@ -179,18 +175,70 @@ fn rock_sim(grid: &mut Array2::<u32>, gusts: &String, num_rocks: i64) -> i64 {
             step += 1;
         }
 
-        // Update the rolling buffer if getting close to overflow
-        let array_height = tower_height - buffer_height;
-        if array_height > GRID_HEIGHT as i64 - BUFFER_THRESH {
-            buffer_height += BUFFER_WINDOW as i64;
-            new_grid = Array2::<u32>::zeros((GRID_HEIGHT, GRID_WIDTH));
-            grid.slice(s![0..GRID_HEIGHT-BUFFER_WINDOW, ..])
-                .assign_to(new_grid.slice_mut(s![BUFFER_WINDOW.., ..]));
-            *grid = new_grid;
+        // Pattern detection
+        let p = detect_cycles(&pattern_vec);
+        if p != (-1, -1) {
+            let height_at_start = tower_height_vec[p.0 as usize - 1];
+            let added_height = tower_height_vec[p.1 as usize] - height_at_start;
+            // println!("Added height of pattern: {}", added_height);
+            let num_steps_since_pattern = num_rocks - p.0;
+            let pattern_length = (p.1 - p.0) + 1;
+            // println!("Pattern found from {} to {}, length {}",
+                // p.0, p.1, pattern_length);
+            let num_patterns_that_fit = num_steps_since_pattern / pattern_length;
+            // println!("Number of steps left: {}, {} patterns",
+                // num_steps_since_pattern, num_patterns_that_fit);
+            let repeated_pattern_height = num_patterns_that_fit * added_height;
+
+            let extra_steps = num_steps_since_pattern - (num_patterns_that_fit * pattern_length);
+            let extra_height = tower_height_vec[(p.0 - 1 + extra_steps) as usize]
+                               - height_at_start;
+            // println!("{} extra steps add {} height", extra_steps, extra_height);
+
+            let total_height = height_at_start + repeated_pattern_height + extra_height;
+            return total_height;
         }
     }
 
     tower_height
+}
+
+fn detect_cycles(v: &Vec<Pattern>) -> (i64, i64) {
+    let len = v.len();
+    if len < 3 {
+        return (-1, -1);
+    }
+
+    for slow_idx in 0..len {
+        let slow_val = v[slow_idx];
+        for fast_idx in slow_idx+2..len {
+            let fast_val = v[fast_idx];
+
+            if fast_val == slow_val {
+                // If we found duplicate, go from the slow to the fast position
+                let mut pattern_found = true;
+                let mut k = 1;
+                let mut i1 = slow_idx;
+                while i1 < fast_idx - 1 {
+                    i1 = slow_idx + k;
+                    let i2 = fast_idx + k;
+                    if i2 >= len {
+                        pattern_found = false;
+                        break;
+                    }
+                    if v[i1] != v[i2] {
+                        pattern_found = false;
+                        break;
+                    }
+                    k += 1;
+                }
+                if pattern_found {
+                    return (slow_idx as i64, (fast_idx - 1) as i64);
+                }
+            }
+        }
+    }
+    (-1, -1)
 }
 
 fn main() {

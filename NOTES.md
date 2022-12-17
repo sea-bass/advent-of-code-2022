@@ -163,3 +163,7 @@ I read on Reddit that one approach to reduce the search space is to eliminate al
 I originally said I wasn't going to spend hours on that, but I definitely spent a longer time with the heuristics above and fixing bugs... so who's the real winner now? Not me.
 
 On a positive note, I grabbed the [`regex`](https://docs.rs/regex/latest/regex/) crate so I could be just a little bit smarter about parsing the file input, and that worked great!
+
+## Day 17
+This problem seemed really fun, and working on Part 1 was very fun, although time-consuming given my skills.
+Yet again, Part 2 throws a practical wrench in things because you can no longer allocate memory to contain everything.

@@ -20,31 +20,19 @@ struct Point {
     z: i32
 }
 
-
-// Part 1 implementation
-fn calc_surface_area(lava_cubes: &HashSet<Point>) -> u32 {
-    let mut total_surface_area = 0;
-    for cube in lava_cubes {
-        // Check all 6 cube faces
-        let pts = vec![
-            Point{x: cube.x + 1, y: cube.y, z: cube.z},
-            Point{x: cube.x - 1, y: cube.y, z: cube.z},
-            Point{x: cube.x, y: cube.y + 1, z: cube.z},
-            Point{x: cube.x, y: cube.y - 1, z: cube.z},
-            Point{x: cube.x, y: cube.y, z: cube.z + 1},
-            Point{x: cube.x, y: cube.y, z: cube.z - 1},
-        ];
-        for pt in pts.iter() {
-            if !lava_cubes.contains(&pt) {
-                total_surface_area += 1;
-            }
-        }
-    }
-    total_surface_area
+// Returns all adjacent points to a cube
+fn get_adjacent_points(pt: &Point) -> Vec<Point> {
+    vec![
+        Point{x: pt.x + 1, y: pt.y, z: pt.z},
+        Point{x: pt.x - 1, y: pt.y, z: pt.z},
+        Point{x: pt.x, y: pt.y + 1, z: pt.z},
+        Point{x: pt.x, y: pt.y - 1, z: pt.z},
+        Point{x: pt.x, y: pt.y, z: pt.z + 1},
+        Point{x: pt.x, y: pt.y, z: pt.z - 1},
+    ]  
 }
 
-
-// Part 2 implementation 
+// Expansion algorithm for Part 2
 fn is_face_exposed(lava_cubes_hash: &HashSet<Point>, pt: &Point) -> bool {
     let mut cube_queue = Vec::new();
     let mut visited_cubes = HashSet::new();
@@ -65,39 +53,30 @@ fn is_face_exposed(lava_cubes_hash: &HashSet<Point>, pt: &Point) -> bool {
             return true;
         }
 
-        // Now expand all 6 directions
-        let pts = vec![
-            Point{x: cur_pt.x + 1, y: cur_pt.y, z: cur_pt.z},
-            Point{x: cur_pt.x - 1, y: cur_pt.y, z: cur_pt.z},
-            Point{x: cur_pt.x, y: cur_pt.y + 1, z: cur_pt.z},
-            Point{x: cur_pt.x, y: cur_pt.y - 1, z: cur_pt.z},
-            Point{x: cur_pt.x, y: cur_pt.y, z: cur_pt.z + 1},
-            Point{x: cur_pt.x, y: cur_pt.y, z: cur_pt.z - 1},
-        ];
-        for p in pts.iter() {
+        // Now expand all directions
+        for p in get_adjacent_points(&cur_pt).iter() {
             if !visited_cubes.contains(&p) {
                 cube_queue.push((p.x, p.y, p.z));
             }
         }
     }
 
+    // If the queue was emptied before finding an exposed face, it's trapped air!
     false
 }
 
-fn calc_surface_area_with_air(lava_cubes: &HashSet<Point>) -> u32 {
+
+fn calc_surface_area(lava_cubes: &HashSet<Point>,
+                     consider_trapped_air: bool) -> u32 {
     let mut total_surface_area = 0;
     for cube in lava_cubes {
         // Check all 6 cube faces
-        let pts = vec![
-            Point{x: cube.x + 1, y: cube.y, z: cube.z},
-            Point{x: cube.x - 1, y: cube.y, z: cube.z},
-            Point{x: cube.x, y: cube.y + 1, z: cube.z},
-            Point{x: cube.x, y: cube.y - 1, z: cube.z},
-            Point{x: cube.x, y: cube.y, z: cube.z + 1},
-            Point{x: cube.x, y: cube.y, z: cube.z - 1},
-        ];
-        for pt in pts.iter() {
-            if is_face_exposed(&lava_cubes, &pt) {
+        for pt in get_adjacent_points(&cube).iter() {
+            let add_face = match consider_trapped_air {
+                true => is_face_exposed(&lava_cubes, &pt),
+                false => !lava_cubes.contains(&pt),
+            };
+            if add_face {
                 total_surface_area += 1;
             }
         }
@@ -123,10 +102,10 @@ fn main() {
     }
 
     // Part 1
-    let surface_area = calc_surface_area(&lava_cubes);
+    let surface_area = calc_surface_area(&lava_cubes, false);
     println!("Part 1: Total surface area = {}", surface_area);
 
     // Part 2
-    let surface_area_with_air = calc_surface_area_with_air(&lava_cubes);
+    let surface_area_with_air = calc_surface_area(&lava_cubes, true);
     println!("Part 2: Total surface area = {}", surface_area_with_air);
 }

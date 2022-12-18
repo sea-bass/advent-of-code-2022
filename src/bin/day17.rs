@@ -15,7 +15,7 @@ use ndarray::Array2;
 
 
 const GRID_WIDTH: usize = 7;
-const GRID_HEIGHT: usize = 100000;  // No need to make this so big since we'll be doing a rolling buffer
+const GRID_HEIGHT: usize = 100000;
 
 type RockPoints = Vec<[i64; 2]>;
 type Pattern = (usize, i64, i64, i64);  // Rock index, gust, horizontal displacement

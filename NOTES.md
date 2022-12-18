@@ -175,3 +175,18 @@ Looking at Reddit again, I see the "discrete math PhD" solution is to apply a cy
 Am I going to go down this rabbit hole, though? Yes.
 
 After taking a break, I spent a few more hours writing up a (probably inefficient) pattern finding algorithm, which sped up the code so much that by the time I figured out the algorithm, fixed bugs, etc. my brute-force approach got approximately 2.8% through all the required steps.
+
+## Day 18
+A manageable problem at last!
+
+Part 1 took me around 15 minutes to complete which was a well-needed ego boost after the last few days have had me doubting myself.
+Hash sets made for a very efficient and quick to implement solution.
+
+Part 2 was a little trickier and I may have gone down the wrong path with trying to actually create a full 3D array, for some reason.
+After burning some time doing that, I realized one could just iteratively expand all unoccupied nodes from our current face and check whether there is any adjacent face that ends up reaching the outskirts of the grid.
+Some silly logic bug fixes later, a solution was born!
+
+I did "cheat" a little in visually inspecting the data and seeing that all the grid values were in the range `1..20` for all problems... but if that were not the case, it would be relatively straightforward to compute the min/max XYZ limits as we're parsing the data in linear time.
+
+Lastly, I ran into a minor snag where I was not able to push structs, even if cloned and the `Copy` and `Clone` traits were derived.
+Worked around it by converting the struct to a tuple of data for that part of the code, but obviously it would have been nice to not do that.

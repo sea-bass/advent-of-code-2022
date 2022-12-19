@@ -4,7 +4,7 @@
 // Example usage:
 //   cargo run --bin day19 data/day19/test_input.txt
 
-use std::cmp::min;
+use std::cmp::{min, max};
 use std::env;
 use std::fs;
 
@@ -74,9 +74,6 @@ fn parse_blueprints(filename: &str) -> Vec<Blueprint> {
 
 // Main simulation function
 fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
-    let mut max_geodes = 0;
-    let mut max_geodes_per_step = vec![0; (n_steps + 1) as usize];
-
     // Initialize
     let init_state = State {
         step: 0,
@@ -85,6 +82,18 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
         ore_robot_building: 0, clay_robot_building: 0, obsidian_robot_building: 0, geode_robot_building: 0
     };
     let mut state_stack = vec![init_state];
+
+    let mut max_geodes = 0;
+    let mut max_geodes_per_step = vec![0; (n_steps + 1) as usize];
+
+    let max_necessary_ore_production = max(
+        blueprint.ore_robot_ore_cost, 
+        max(
+            blueprint.clay_robot_ore_cost,
+            max (blueprint.obsidian_robot_ore_cost,
+                 blueprint.geode_robot_ore_cost)
+        )
+    );
 
     // Simulate
     while !state_stack.is_empty() {
@@ -147,7 +156,8 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
             continue;
         }
         // Obsidian robot
-        if cur_state.ore >= blueprint.obsidian_robot_ore_cost &&
+        if cur_state.n_obsidian_robots < blueprint.geode_robot_obsidian_cost &&
+           cur_state.ore >= blueprint.obsidian_robot_ore_cost &&
            cur_state.clay >= blueprint.obsidian_robot_clay_cost {
             let mut new_state = cur_state.clone();
             new_state.ore -= blueprint.obsidian_robot_ore_cost;
@@ -156,14 +166,16 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
             state_stack.push(new_state);
         }
         // Clay robot
-        if cur_state.ore >= blueprint.clay_robot_ore_cost {
+        if cur_state.n_clay_robots < blueprint.obsidian_robot_clay_cost && 
+           cur_state.ore >= blueprint.clay_robot_ore_cost {
             let mut new_state = cur_state.clone();
             new_state.ore -= blueprint.clay_robot_ore_cost;
             new_state.clay_robot_building += 1;
             state_stack.push(new_state);
         }
         // Ore robot
-        if cur_state.ore >= blueprint.ore_robot_ore_cost {
+        if cur_state.n_ore_robots < max_necessary_ore_production &&
+           cur_state.ore >= blueprint.ore_robot_ore_cost {
             let mut new_state = cur_state.clone();
             new_state.ore -= blueprint.ore_robot_ore_cost;
             new_state.ore_robot_building = 1;

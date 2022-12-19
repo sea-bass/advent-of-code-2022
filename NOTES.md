@@ -194,12 +194,9 @@ Worked around it by converting the struct to a tuple of data for that part of th
 ## Day 19
 Part 1 seemed to be a similar "simulate and keep track of max value" problem, like on Day 16, except this one had more interesting dynamics and was overall slower to get an answer.
 
-I found one pruning strategy to keep track of the max number of geodes at each step.
-If any node expanded had less geodes than this running max, it's necessarily not on the most efficient and we can blow through all those expanded states.
-This helped (once I realized I had a bug that over-pruned for the Part 2 puzzle input), but things still got pretty slow moving to the second part, where we had 30 blueprints instead of 2 to consider.
-
-Since the blueprints can all be executed in parallel to produce the quality score, I decided to look up what Rust had to offer in terms of parallel iterators.
+Since the blueprints can all be executed in parallel to produce results, I decided to look up what Rust had to offer in terms of parallel iterators.
 Lo and behold, I was able to grab the [`rayon`](https://docs.rs/rayon/latest/rayon/index.html) crate to parallelize my entire implementation!
+This was especially helpful for Part 1 in which we're going over 30 blueprints in parallel.
 
 ```rust
 fn get_quality_level(blueprints: &Vec<Blueprint>, n_steps: u32) -> u32 {
@@ -209,6 +206,11 @@ fn get_quality_level(blueprints: &Vec<Blueprint>, n_steps: u32) -> u32 {
 }
 ```
 
-I'm sure there is something clever to do with the pattern recognition approach of Day 17 to help with the longer step simulations in Part 2, because there is likely a limit cycle on what robots to build once geode robots are unlocked.
-However, my (mostly) brute-force approach was able to solve the puzzle problems on the order of minutes / few hours so not a huge deal.
-Plug and chug!
+For Part 2, however, pruning search was the key.
+I came up with one pruning strategy to keep track of the max number of geodes at each step.
+If any node expanded had less geodes than this running max, it's necessarily not on the most efficient and we can blow through all those expanded states.
+This helped (once I realized I had a bug that over-pruned for the Part 2 puzzle input), but things still got pretty slow moving to the second part, where the horizon time increased.
+
+After going on Reddit for more pruning strategy ideas, there was a really nice one I overlooked, in which we don't want to expand any more nodes if our material production already exceeds the necessary production for any robot we want.
+
+

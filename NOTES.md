@@ -190,3 +190,25 @@ I did "cheat" a little in visually inspecting the data and seeing that all the g
 
 Lastly, I ran into a minor snag where I was not able to push structs, even if cloned and the `Copy` and `Clone` traits were derived.
 Worked around it by converting the struct to a tuple of data for that part of the code, but obviously it would have been nice to not do that.
+
+## Day 19
+Part 1 seemed to be a similar "simulate and keep track of max value" problem, like on Day 16, except this one had more interesting dynamics and was overall slower to get an answer.
+
+I found one pruning strategy to keep track of the max number of geodes at each step.
+If any node expanded had less geodes than this running max, it's necessarily not on the most efficient and we can blow through all those expanded states.
+This helped (once I realized I had a bug that over-pruned for the Part 2 puzzle input), but things still got pretty slow moving to the second part, where we had 30 blueprints instead of 2 to consider.
+
+Since the blueprints can all be executed in parallel to produce the quality score, I decided to look up what Rust had to offer in terms of parallel iterators.
+Lo and behold, I was able to grab the [`rayon`](https://docs.rs/rayon/latest/rayon/index.html) crate to parallelize my entire implementation!
+
+```rust
+fn get_quality_level(blueprints: &Vec<Blueprint>, n_steps: u32) -> u32 {
+    blueprints.par_iter()
+              .map(|b| b.id * get_max_geodes(&b, n_steps))
+              .sum()
+}
+```
+
+I'm sure there is something clever to do with the pattern recognition approach of Day 17 to help with the longer step simulations in Part 2, because there is likely a limit cycle on what robots to build once geode robots are unlocked.
+However, my (mostly) brute-force approach was able to solve the puzzle problems on the order of minutes / few hours so not a huge deal.
+Plug and chug!

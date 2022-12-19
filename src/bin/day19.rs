@@ -4,15 +4,20 @@
 // Example usage:
 //   cargo run --bin day19 data/day19/test_input.txt
 
+use std::cmp::min;
 use std::env;
 use std::fs;
 
+extern crate rayon;
+use rayon::prelude::*;
 extern crate regex;
 use regex::Regex;
 
 
+// Structs to describe the puzzle
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 struct Blueprint {
+    id: u32,
     ore_robot_ore_cost: u32,
     clay_robot_ore_cost: u32,
     obsidian_robot_ore_cost: u32,
@@ -39,8 +44,10 @@ struct State {
 }
 
 
+// Input file parsing helper
 fn parse_blueprints(filename: &str) -> Vec<Blueprint> {
-    let expr = "Each ore robot costs ([0-9]*) ore. \
+    let expr = "Blueprint ([0-9]*): \
+                Each ore robot costs ([0-9]*) ore. \
                 Each clay robot costs ([0-9]*) ore. \
                 Each obsidian robot costs ([0-9]*) ore and ([0-9]*) clay. \
                 Each geode robot costs ([0-9]*) ore and ([0-9]*) obsidian.";
@@ -52,18 +59,20 @@ fn parse_blueprints(filename: &str) -> Vec<Blueprint> {
         let cap = re.captures(line).unwrap();
         blueprints.push(
             Blueprint {
-                ore_robot_ore_cost: (&cap[1]).to_string().parse::<u32>().unwrap(),
-                clay_robot_ore_cost: (&cap[2]).to_string().parse::<u32>().unwrap(),
-                obsidian_robot_ore_cost: (&cap[3]).to_string().parse::<u32>().unwrap(),
-                obsidian_robot_clay_cost: (&cap[4]).to_string().parse::<u32>().unwrap(),
-                geode_robot_ore_cost: (&cap[5]).to_string().parse::<u32>().unwrap(),
-                geode_robot_obsidian_cost: (&cap[6]).to_string().parse::<u32>().unwrap()
+                id: (&cap[1]).to_string().parse::<u32>().unwrap(),
+                ore_robot_ore_cost: (&cap[2]).to_string().parse::<u32>().unwrap(),
+                clay_robot_ore_cost: (&cap[3]).to_string().parse::<u32>().unwrap(),
+                obsidian_robot_ore_cost: (&cap[4]).to_string().parse::<u32>().unwrap(),
+                obsidian_robot_clay_cost: (&cap[5]).to_string().parse::<u32>().unwrap(),
+                geode_robot_ore_cost: (&cap[6]).to_string().parse::<u32>().unwrap(),
+                geode_robot_obsidian_cost: (&cap[7]).to_string().parse::<u32>().unwrap()
             }
         );
     }
     blueprints
 }
 
+// Main simulation function
 fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
     let mut max_geodes = 0;
     let mut max_geodes_per_step = vec![0; (n_steps + 1) as usize];
@@ -87,7 +96,8 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
         }
         // If we know we can have more geodes at this step from another path,
         // skip expanding this node any further.
-        if max_geodes_per_step[cur_state.step as usize] > cur_state.geode {
+        // This fudge factor of 2 works, but I'm not sure why this did and 1 didn't...
+        if max_geodes_per_step[cur_state.step as usize] > cur_state.geode + 2 {
             continue;
         }
 
@@ -119,7 +129,7 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
         // Check max geodes
         if cur_state.geode > max_geodes {
             max_geodes = cur_state.geode;
-            println!("  Max geodes so far: {}", max_geodes);
+            // println!("  [Blueprint {}] Max geodes so far: {}", blueprint.id, max_geodes);
         }
         if cur_state.geode > max_geodes_per_step[cur_state.step as usize] {
             max_geodes_per_step[cur_state.step as usize] = cur_state.geode;
@@ -134,6 +144,7 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
             new_state.obsidian -= blueprint.geode_robot_obsidian_cost;
             new_state.geode_robot_building += 1;
             state_stack.push(new_state);
+            continue;
         }
         // Obsidian robot
         if cur_state.ore >= blueprint.obsidian_robot_ore_cost &&
@@ -162,20 +173,26 @@ fn get_max_geodes(blueprint: &Blueprint, n_steps: u32) -> u32 {
         state_stack.push(cur_state.clone());
     }
 
+    println!("[Blueprint {}] Produced {} geodes\n", blueprint.id, max_geodes);
     max_geodes
 }
 
-fn get_quality_level(blueprints: &Vec<Blueprint>, n_steps: u32) -> u32 {
 
-    let mut quality_level = 0;
-    for (idx, blueprint) in blueprints.iter().enumerate() {
-        println!("Blueprint {}:", idx + 1);
-        let n_geodes = get_max_geodes(&blueprint, n_steps);
-        quality_level += ((idx + 1) as u32) * n_geodes;
-        println!("Produced {} geodes\n", n_geodes);
-    }
-    quality_level
+// Part 1 entry point
+fn get_quality_level(blueprints: &Vec<Blueprint>, n_steps: u32) -> u32 {
+    blueprints.par_iter()
+              .map(|b| b.id * get_max_geodes(&b, n_steps))
+              .sum()
 }
+
+// Part 2 entry point
+fn get_geode_product(blueprints: &Vec<Blueprint>, n_steps: u32, n_blueprints: usize) -> u32 {
+    let n = min(n_blueprints, blueprints.len());
+    blueprints[0..n].par_iter()
+                    .map(|b| get_max_geodes(&b, n_steps))
+                    .product()
+}
+
 
 fn main() {
     // Get the filename from the command line, else fall back to default
@@ -186,5 +203,9 @@ fn main() {
 
     // Part 1
     let quality_level = get_quality_level(&blueprints, 24);
-    println!("Part 1: Quality level = {}", quality_level);
+    println!("\nPart 1: Quality level = {}\n", quality_level);
+
+    // Part 2
+    let geode_product = get_geode_product(&blueprints, 32, 3);
+    println!("\nPart 2: Geode multiple = {}\n", geode_product);
 }

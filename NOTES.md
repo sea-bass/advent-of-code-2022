@@ -213,4 +213,12 @@ This helped (once I realized I had a bug that over-pruned for the Part 2 puzzle 
 
 After going on Reddit for more pruning strategy ideas, there was a really nice one I overlooked, in which we don't want to expand any more nodes if our material production already exceeds the necessary production for any robot we want.
 
+## Day 20
+This was an interesting problem because it immediately indicates you should try to in-place swapping of a list or you're going to have a bad time.
+Rust happens to have a [`swap`](https://doc.rust-lang.org/std/mem/fn.swap.html) function that operates on containers such as the `Vec`s I ended up using, so that part was fine.
 
+While it took me a while to get the swapping logic right when the values wrap around (thank goodness for test examples), the rest was relatively smooth besides dealing with wrapping and overflow.
+
+Even so, Part 2 took a while to run with the full puzzle input -- a bit over an hour with the release profile.
+You definitely want to be doing these swapping operations in slices vs. in a sequence of one-move increments, but as always Part 1 didn't seem like it needed it.
+While it shouldn't be a shock 20 days in, it's worth the reminder that if there is a gotcha on computational complexity, it will very almost certainly come up in Part 2.

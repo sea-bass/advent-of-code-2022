@@ -219,6 +219,7 @@ Rust happens to have a [`swap`](https://doc.rust-lang.org/std/mem/fn.swap.html) 
 
 While it took me a while to get the swapping logic right when the values wrap around (thank goodness for test examples), the rest was relatively smooth besides dealing with wrapping and overflow.
 
-Even so, Part 2 took a while to run with the full puzzle input -- a bit over an hour with the release profile.
-You definitely want to be doing these swapping operations in slices vs. in a sequence of one-move increments, but as always Part 1 didn't seem like it needed it.
-While it shouldn't be a shock 20 days in, it's worth the reminder that if there is a gotcha on computational complexity, it will very almost certainly come up in Part 2.
+I had an embarrassing computational bottleneck that turned out to not even be algorithmic!
+For some reason, I had changed something that used the remainder (`%`) operator to a while-loop to debug something, and thought nothing of it.
+After some trial-and-error profiling, I found this and my code sped up a ridiculous amount.
+Small victory!

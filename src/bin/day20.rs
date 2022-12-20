@@ -17,12 +17,9 @@ fn mix(mut data: Vec<i64>, num_mixes: usize) -> Vec<i64> {
             // Calculate the target index
             let cur_idx = orig_indices.iter().position(|&x| x == vals_moved)
                                       .unwrap() as i64;
-            let mut target_idx = cur_idx + data[cur_idx as usize];
-            while target_idx <= 0 {
-                target_idx += num_vals - 1 ;
-            }
-            while target_idx >= num_vals {
-                target_idx -= num_vals - 1;
+            let mut target_idx = (cur_idx + data[cur_idx as usize]) % (num_vals - 1);
+            if target_idx < 0 {
+                target_idx += num_vals - 1;
             }
             // println!("Moving {} from index {} to {}",
             //     data[cur_idx as usize], cur_idx, target_idx);

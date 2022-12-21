@@ -3,8 +3,6 @@
 //
 // Example usage:
 //   cargo run --bin day17 data/day17/test_input.txt
-//
-// Since this puzzle takes a while, recommend running with the -r flag for release profile.
 
 use std::cmp::max;
 use std::env;

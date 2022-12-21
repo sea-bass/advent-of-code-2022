@@ -3,8 +3,6 @@
 //
 // Example usage:
 //   cargo run --bin day16 data/day16/test_input.txt
-//
-// Since this puzzle takes a while, recommend running with the -r flag for release profile.
 
 use std::collections::{HashMap, HashSet};
 use std::env;

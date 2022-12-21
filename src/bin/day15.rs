@@ -162,7 +162,7 @@ fn search_beacons(data: &str, max_dim: i32) -> ((i32, i32), i64) {
     }
 
     // fallback return
-    println!("WARNING: No beacon found. Returning default values.")
+    println!("WARNING: No beacon found. Returning default values.");
     (beacon_position, tuning_frequency)
 }
 

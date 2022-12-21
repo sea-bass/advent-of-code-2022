@@ -4,7 +4,7 @@
 //   cargo run --bin hello_ndarray
 
 extern crate ndarray;
-use ndarray::{Array2, aview2, s};
+use ndarray::{Array2, s};
 
 fn main() {
     // Create a 2D array

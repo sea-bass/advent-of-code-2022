@@ -223,3 +223,14 @@ I had an embarrassing computational bottleneck that turned out to not even be al
 For some reason, I had changed something that used the remainder (`%`) operator to a while-loop to debug something, and thought nothing of it.
 After some trial-and-error profiling, I found this and my code sped up a ridiculous amount.
 Small victory!
+
+## Day 21
+Mmmm, recursion.
+
+When I started reading this puzzle, I immediately got on the defensive about using a `HashMap` to keep track of my data out of fear that I'd be driven into out-of-memory issues for Part 2 and I'd have to reimplement it as an iterative solution.
+However, my intuition won out and there was no slow computation to deal with today; only bugs in my implementing the inverse operations for the second part.
+
+I was also apprehensive about using the `evalexpr` crate again since they did not support any integer data types beyond `i64`, and that got me last time before I fixed my solution with the `%` operator.
+Fortunately, the parsing didn't need anything fancy here and a simple `split_whitespace()` + `match` block did the trick.
+
+Overall, not a bad day. It was focused on getting the algorithm right, so I felt I was spending my time thinking and not bashing my head into a wall.

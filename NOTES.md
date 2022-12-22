@@ -241,4 +241,4 @@ The first part of this puzzle seemed fun just like the prior day, where it took 
 For parsing the input which alternates between numeric and non-numeric string portions, I couldn't find anything better than [this Stack Overflow question](https://stackoverflow.com/questions/32257273/split-a-string-keeping-the-separators) proposes, so I shamelessly copied it over into my solution.
 For representing the world, the `ndarray` crate made a reappearance and it worked great!
 
-The weird cube geometry of Part 2 is honestly not interesting to me, so I'm happily going to pass on this one and come back to it if I feel like it.
+The weird cube geometry of Part 2 was honestly a slog... but at least with hard-coded rules for the puzzle input, a paper cube, and a lot of patience, we got there!

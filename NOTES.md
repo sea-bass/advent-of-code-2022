@@ -234,3 +234,11 @@ I was also apprehensive about using the `evalexpr` crate again since they did no
 Fortunately, the parsing didn't need anything fancy here and a simple `split_whitespace()` + `match` block did the trick.
 
 Overall, not a bad day. It was focused on getting the algorithm right, so I felt I was spending my time thinking and not bashing my head into a wall.
+
+## Day 22
+The first part of this puzzle seemed fun just like the prior day, where it took a while but I felt motivated to get through it and implement a working solution ... however inelegant.
+
+For parsing the input which alternates between numeric and non-numeric string portions, I couldn't find anything better than [this Stack Overflow question](https://stackoverflow.com/questions/32257273/split-a-string-keeping-the-separators) proposes, so I shamelessly copied it over into my solution.
+For representing the world, the `ndarray` crate made a reappearance and it worked great!
+
+The weird cube geometry of Part 2 is honestly not interesting to me, so I'm happily going to pass on this one and come back to it if I feel like it.

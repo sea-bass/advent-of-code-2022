@@ -242,3 +242,12 @@ For parsing the input which alternates between numeric and non-numeric string po
 For representing the world, the `ndarray` crate made a reappearance and it worked great!
 
 The weird cube geometry of Part 2 was honestly a slog... but at least with hard-coded rules for the puzzle input, a paper cube, and a lot of patience, we got there!
+
+## Day 23
+This was another fun puzzle throughout!
+No real surprises or weird computational/memory bottlenecks crept up in Part 2, which was appreciated as we approach the end of this event.
+
+In this puzzle, I was deliberate about not representing the state as a 2D array using something like `ndarray` because it was evident that the grid could just keep expanding and keeping track of indices would be a pain.
+So, a simple data structure that just contains each elf's position did the trick, even if there were lots of linear-time searches.
+I considered maybe using a `HashSet` to identify duplicates, but having indices seemed useful in this case, so pure `Vec` it was.
+Even so, Part 2 didn't take offensively long -- about 20 seconds with the release profile.

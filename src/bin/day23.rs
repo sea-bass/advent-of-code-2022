@@ -1,5 +1,5 @@
 // Solution to Day 23 puzzle
-// https://adventofcode.com/2022/day/22
+// https://adventofcode.com/2022/day/23
 //
 // Example usage:
 //   cargo run -r --bin day23 data/day23/test_input.txt

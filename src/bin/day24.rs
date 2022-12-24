@@ -131,18 +131,27 @@ fn step_blizzard_state(grid: &OccupancyGrid, blizzard_state: &BlizzardState) -> 
     new_blizzard_state
 }
 
-// Search function for part 1
-fn search_blizzard(grid: &OccupancyGrid, init_blizzard_state: &BlizzardState) -> i32 {
+// Search function
+fn search_blizzard(grid: &OccupancyGrid,
+                   init_blizzard_state: &BlizzardState,
+                   forward_dir: bool) -> (i32, BlizzardState) {
     let shape = grid.shape();
     let n_rows = shape[0] as i32;
     let n_cols = shape[1] as i32;
 
-    // Assumes initial and goal positions are always the top left and bottom right of map
-    let init_pos: (i32, i32) = (0, 1);
-    let goal_pos: (i32, i32) = (n_rows - 1, n_cols - 2);
+    // Assumes initial and goal positions are always the top left and bottom right of map,
+    // unless the direction is flipped
+    let init_pos: (i32, i32) = match forward_dir {
+        true => (0, 1),
+        false => (n_rows - 1, n_cols - 2)
+    };
+    let goal_pos: (i32, i32) = match forward_dir {
+        true => (n_rows - 1, n_cols - 2),
+        false => (0, 1)
+    };
 
     // Initialize search
-    // Search happens as A* over (step_number, position) tuples.
+    // Search happens as BFS over (step_number, position) tuples.
     // When the step number increases, we can step the blizzard state and update the occupancy map.
     let mut state_vec = VecDeque::new();
     state_vec.push_back((0, init_pos));
@@ -157,14 +166,13 @@ fn search_blizzard(grid: &OccupancyGrid, init_blizzard_state: &BlizzardState) ->
     grid_vec.push(get_grid_at_blizzard_state(&grid, &cur_blizzard_state));
 
     // Do the search
-    let mut best_cost = i32::MAX;
     while !state_vec.is_empty() {
         // Get the next state and check if it's the goal
         let state = state_vec.pop_front().unwrap();
         let cur_step = state.0;
         let cur_pos = state.1;
         if cur_pos == goal_pos {
-            return cur_step;
+            return (cur_step, blizzard_state_vec[cur_step as usize - 1].clone());
         }
 
         // Get the grid at the current state, creating it if not
@@ -187,7 +195,7 @@ fn search_blizzard(grid: &OccupancyGrid, init_blizzard_state: &BlizzardState) ->
             }
         }
         let down_pos = (cur_pos.0 + 1, cur_pos.1);
-        if cur_grid[[down_pos.0 as usize, down_pos.1 as usize]] == 0 {
+        if down_pos.0 < n_rows && cur_grid[[down_pos.0 as usize, down_pos.1 as usize]] == 0 {
             let down_state = (cur_step + 1, down_pos);
             if !state_set.contains(&down_state) {
                 state_vec.push_back(down_state);
@@ -221,7 +229,7 @@ fn search_blizzard(grid: &OccupancyGrid, init_blizzard_state: &BlizzardState) ->
     }
 
     println!("Did not find goal!");
-    -1
+    (-1, init_blizzard_state.clone())
 }
 
 fn main() {
@@ -233,6 +241,14 @@ fn main() {
     let (grid, init_blizzard_state) = parse_data(filename);
 
     // Part 1
-    let num_steps = search_blizzard(&grid, &init_blizzard_state);
+    let (num_steps, _) = search_blizzard(&grid, &init_blizzard_state, true);
     println!("\nPart 1: Total steps = {}\n", num_steps);
+
+    // Part 2
+    let (steps_there, blizzard_state) = search_blizzard(&grid, &init_blizzard_state, true);
+    let (steps_back, blizzard_state) = search_blizzard(&grid, &blizzard_state, false);
+    let (steps_there_again, _) = search_blizzard(&grid, &blizzard_state, true);
+    println!("\nPart 2: Total steps = {} + {} + {} = {}\n",
+        steps_there, steps_back, steps_there_again,
+        steps_there + steps_back + steps_there_again);
 }

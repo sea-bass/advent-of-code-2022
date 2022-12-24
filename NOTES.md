@@ -251,3 +251,19 @@ In this puzzle, I was deliberate about not representing the state as a 2D array 
 So, a simple data structure that just contains each elf's position did the trick, even if there were lots of linear-time searches.
 I considered maybe using a `HashSet` to identify duplicates, but having indices seemed useful in this case, so pure `Vec` it was.
 Even so, Part 2 didn't take offensively long -- about 20 seconds with the release profile.
+
+## Day 24
+This puzzle was fun and has the kind of thing I like (simulate weird dynamics until an answer comes up).
+However, it took me longer than expected simply because I had a few silly bugs that took me a while to realize.
+
+First, I was implementing DFS instead of BFS accidentally by popping off the wrong side of my queue. Embarrassing.
+This led me all the way to implementing A* with a priority queue from the [`priority_queue`](https://docs.rs/priority-queue/latest/priority_queue/) crate, but once I realized my folly I backpedaled and did a regular `Vec` with an accompanying `HashSet` to check for duplicates.
+This makes it the second (or third?) time this challenge that I brought in a priority queue and then realized it wasn't necessary.
+
+Secondly, in my transition model I wasn't factoring in that staying in place was not always a feasible transition because blizzards also come to the elf's current position.
+Also embarrassing.
+
+Once I figured these two things out, the path from Part 1 to Part 2 took just a couple minutes.
+Simply had to update the function signature to change the initial/goal positions as well as return the final blizzard state for the start of the next round.
+
+One more to go -- home stretch!

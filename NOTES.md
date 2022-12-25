@@ -267,3 +267,13 @@ Once I figured these two things out, the path from Part 1 to Part 2 took just a 
 Simply had to update the function signature to change the initial/goal positions as well as return the final blizzard state for the start of the next round.
 
 One more to go -- home stretch!
+
+## Day 25
+In concept, this last problem was meant to be easy, in that it required converting some weird base + offset numbers to decimal, adding them up, and then converting back to that other encoding.
+However, I got stuck in the re-encoding at the end and was taking on a much more complex approach than was necessary.
+Should have started by searching the Internet.
+
+Anyways... **Advent of Code 2022 is officially completed!**
+
+I certainly feel much more comfortable with Rust, in that I had never used it at all before this challenge.
+There's still much more to know, but this has formed a good basis and I look forward to using it for personal work in the future.
